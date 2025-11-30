@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 from langchain_community.document_loaders import TextLoader
-from langchain_openai import embeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai.embeddings import OpenAIEmbeddings
 

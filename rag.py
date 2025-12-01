@@ -12,17 +12,26 @@ import os
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
+# Load the doc
 loader = TextLoader('sturgeon_corpus.txt')
 documents = loader.load()
+
+# Split the doc into chunks
 splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 document_chunks = splitter.split_documents(documents)
+
 embeddings = OpenAIEmbeddings()
+
 vector_store = FAISS.from_documents(document_chunks, embeddings)
+
+# Set up retriever
 retriever = vector_store.as_retriever(
   search_type="similarity",
   search_kwargs={"k": 5} # give the top 5 most revelant document
 )
+
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
+
 qa_chain = RetrievalQA.from_chain_type(
   llm=llm,
   chain_type="stuff",
